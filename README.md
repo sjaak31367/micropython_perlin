@@ -21,7 +21,8 @@ import perlin
 perlin.reseed(31367)
 
 #perlin.octave_perlin(float x, float y, float z, [int octaves, [float persistence]])
-perlin.octave_perlin(0.5, 0.5, 0.5, 6)  # 0.531746```  
+perlin.octave_perlin(0.5, 0.5, 0.5, 6)  # 0.531746
+```  
 
 ----
 
