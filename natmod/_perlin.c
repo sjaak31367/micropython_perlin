@@ -1,11 +1,8 @@
-/* This example demonstrates the following features in a native module:
-    - defining a simple function exposed to Python
-    - defining a local, helper C function
-    - getting and creating integer objects
-*/
-
 // Include the header file to get access to the MicroPython API
 #include "py/dynruntime.h"
+#include <math.h>
+
+#define lerp(t, a, b) ((a) + (t) * ((b) - (a)))
 
 // Helper function to compute factorial
 static mp_int_t factorial_helper(mp_int_t x) {
@@ -13,6 +10,19 @@ static mp_int_t factorial_helper(mp_int_t x) {
         return 1;
     }
     return x * factorial_helper(x - 1);
+}
+
+static mp_float_t _tost(mp_float_t f) {
+    //float* c = 2.0f; //mp_obj_new_float(2.0f)
+    /*mp_obj_t a = mp_obj_new_float_from_f(2.0f);
+    mp_float_t b = mp_obj_get_float_to_f(f);
+    return mp_obj_new_float_from_f(mp_obj_get_float_to_f(a)*b);*/
+    /*mp_float_t result;
+    mp_float_t two = mp_obj_new_float(2.0f);
+    result = f / two;//mp_obj_get_float_to_f(two);
+    return result;*/
+    //mp_float_t two = MICROPY_FLOAT_CONST(2.0);
+    return f / 2;
 }
 
 // This is the function which will be called from Python, as factorial(x)
@@ -24,8 +34,13 @@ static mp_obj_t factorial(mp_obj_t x_obj) {
     // Convert the result to a MicroPython integer object and return it
     return mp_obj_new_int(result);
 }
+static mp_obj_t tost(mp_obj_t f_obj) {
+    mp_float_t input = mp_obj_get_float_to_f(f_obj);
+    return mp_obj_new_float(_tost(input));
+}
 // Define a Python reference to the function above
 static MP_DEFINE_CONST_FUN_OBJ_1(factorial_obj, factorial);
+static MP_DEFINE_CONST_FUN_OBJ_1(tost_obj, tost);
 
 // This is the entry point and is called when the module is imported
 mp_obj_t mpy_init(mp_obj_fun_bc_t *self, size_t n_args, size_t n_kw, mp_obj_t *args) {
@@ -34,6 +49,7 @@ mp_obj_t mpy_init(mp_obj_fun_bc_t *self, size_t n_args, size_t n_kw, mp_obj_t *a
 
     // Make the function available in the module's namespace
     mp_store_global(MP_QSTR_factorial, MP_OBJ_FROM_PTR(&factorial_obj));
+    mp_store_global(MP_QSTR_tost, MP_OBJ_FROM_PTR(&tost_obj));
 
     // This must be last, it restores the globals dict
     MP_DYNRUNTIME_INIT_EXIT
