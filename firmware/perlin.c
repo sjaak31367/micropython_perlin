@@ -1,5 +1,7 @@
 // Include the header file to get access to the MicroPython API
-#include "py/dynruntime.h"
+//#include "py/dynruntime.h"
+#include "py/obj.h"
+#include "py/runtime.h"
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -18,6 +20,7 @@ static const int permutation[] = {
 };
 
 static int p[512];
+// TODO EMPTY
 
 void reseed(int seed) {
     srand(seed);
@@ -95,19 +98,40 @@ float octave_perlin(float x, float y, float z, int octaves, float persistence) {
 #include "py/obj.h"
 #include "py/runtime.h"
 
-// Wrapper for perlin function
+// Wrapper for perlin functions
+static void mod_perlin_reseed(mp_obj_t seed_obj) {
+    reseed(mp_obj_get_int(seed_obj));
+}
 static mp_obj_t mod_perlin_perlin(mp_obj_t x_obj, mp_obj_t y_obj, mp_obj_t z_obj) {
     float x = mp_obj_get_float(x_obj);
     float y = mp_obj_get_float(y_obj);
     float z = mp_obj_get_float(z_obj);
     return mp_obj_new_float(perlin(x, y, z));
 }
+static mp_obj_t mod_perlin_octave_perlin(size_t n_args, const mp_obj_t* args) {
+    float x = mp_obj_get_float(args[0]);
+    float y = mp_obj_get_float(args[1]);
+    float z = mp_obj_get_float(args[2]);
+    int octaves = 1;
+    float persistence = 0.5f;
+    if (n_args >= 4) {
+        octaves = mp_obj_get_int(args[3]);
+    }
+    if (n_args >= 5) {
+        persistence = mp_obj_get_float(args[4]);
+    }
+    return mp_obj_new_float(octave_perlin(x, y, z, octaves, persistence));
+}
+static MP_DEFINE_CONST_FUN_OBJ_1(mod_perlin_reseed_obj, mod_perlin_reseed);
 static MP_DEFINE_CONST_FUN_OBJ_3(mod_perlin_perlin_obj, mod_perlin_perlin);
+static MP_DEFINE_CONST_FUN_OBJ_VAR(mod_perlin_octave_perlin_obj, 3, mod_perlin_octave_perlin);
 
 // Add additional bindings similarly for other functions
 
 static const mp_rom_map_elem_t perlin_module_globals_table[] = {
+    { MP_ROM_QSTR(MP_QSTR_reseed), MP_ROM_PTR(&mod_perlin_reseed_obj) },
     { MP_ROM_QSTR(MP_QSTR_perlin), MP_ROM_PTR(&mod_perlin_perlin_obj) },
+    { MP_ROM_QSTR(MP_QSTR_octave_perlin), MP_ROM_PTR(&mod_perlin_octave_perlin_obj) },
     // Other function bindings go here
 };
 
@@ -118,7 +142,7 @@ const mp_obj_module_t perlin_user_cmodule = {
     .globals = (mp_obj_dict_t*)&perlin_module_globals,
 };
 
-MP_REGISTER_MODULE(MP_QSTR_perlin, perlin_user_cmodule, MODULE_PERLIN_ENABLED);
+MP_REGISTER_MODULE(MP_QSTR_perlin, perlin_user_cmodule);
 
 /*// Define a Python reference to the function above
 static MP_DEFINE_CONST_FUN_OBJ_VAR(py_noise2_obj, 4, py_noise2);
