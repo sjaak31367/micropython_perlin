@@ -3,10 +3,10 @@ MPY_DIR = ../../../../../../..
 #Assuming the makefile is located at /home/sjaak/Documents/micropython/micropython/ports/esp32/boards/LOLIN_S2_MINI/modules/micropython_perlin/natmod/Makefile
 
 # Name of module
-MOD = _perlin
+MOD = perlin
 
 # Source files (.c or .py)
-SRC = _perlin.c
+SRC = perlin.c
 
 # Architecture to build for (x86, x64, armv7m, xtensa, xtensawin)
 ARCH = xtensawin
