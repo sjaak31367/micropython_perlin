@@ -8,7 +8,7 @@ ARCH = xtensawin
 MOD = perlin
 
 # Source files (.c or .py)
-SRC = perlin.c
+SRC = perlin.c perlin.py
 
 # Stuff to make soft-float work
 # If symbols are undefined, use tools/find_symbols.py to locate object files to add
