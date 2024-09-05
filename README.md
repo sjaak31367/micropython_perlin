@@ -15,7 +15,11 @@ I'm using a Lolin S2 Mini, so I'll end up with `/home/sjaak/.../micropython/port
 (B) Or you can add it to `micropython/ports/{port}/boards/{board}/mpconfigboard.cmake` with `set(USER_C_MODULES ${MICROPY_BOARD_DIR}/modules/micropython_perlin/firmware/perlin.cmake)`  
 4. Flash your new firmware, and you should have a functioning perlin noise generator installed!  
 ###### Compile (native module version):  
-1. Can't yet, due to it being unable to find stdlib during link time. :/  
+1. Have the micropython repo, and have mpy-cross compiled.  
+2. `cd` into this repo's `natmod`.  
+3. Update MPY_DIR and ARCH to your usecase.  
+4. `make`  
+5. Upload perlin.mpy to your board.  
 
 ###### Usage:
 ```py
