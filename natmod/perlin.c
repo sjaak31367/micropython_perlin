@@ -1,7 +1,7 @@
 // Include the header file to get access to the MicroPython API
 //#include "py/dynruntime.h"
 #include "py/obj.h"
-#include "py/runtime.h"
+#include "py/dynruntime.h"
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -9,15 +9,15 @@
 static int p[512];
 
 void reseed(int seed) {
-	srand(seed);
+    srand(seed);
     for (int i = 0; i < 256; ++i){
         p[i] = i;
     }
     for (int i = 0; i < 256; ++i) {
         int swap = rand() % 256;
-		int temp = p[swap];
-		p[swap]  = p[i];
-		p[i]     = temp;
+        int temp = p[swap];
+        p[swap]  = p[i];
+        p[i]     = temp;
     }
     for (int i = 0; i < 256; ++i) {
         p[i+256] = p[i];
@@ -84,13 +84,10 @@ float octave_perlin(float x, float y, float z, int octaves, float persistence) {
     return total / max_value;
 }
 
-#include "py/obj.h"
-#include "py/runtime.h"
-
 // Wrapper for perlin functions
 static mp_obj_t mod_perlin_reseed(mp_obj_t seed_obj) {
     reseed(mp_obj_get_int(seed_obj));
-	return mp_const_none;
+    return mp_const_none;
 }
 static mp_obj_t mod_perlin_perlin(mp_obj_t x_obj, mp_obj_t y_obj, mp_obj_t z_obj) {
     float x = mp_obj_get_float(x_obj);
@@ -112,30 +109,11 @@ static mp_obj_t mod_perlin_octave_perlin(size_t n_args, const mp_obj_t* args) {
     }
     return mp_obj_new_float(octave_perlin(x, y, z, octaves, persistence));
 }
+
+// Define a Python reference to the function above
 static MP_DEFINE_CONST_FUN_OBJ_1(mod_perlin_reseed_obj, mod_perlin_reseed);
 static MP_DEFINE_CONST_FUN_OBJ_3(mod_perlin_perlin_obj, mod_perlin_perlin);
 static MP_DEFINE_CONST_FUN_OBJ_VAR(mod_perlin_octave_perlin_obj, 3, mod_perlin_octave_perlin);
-
-// Add additional bindings similarly for other functions
-
-static const mp_rom_map_elem_t perlin_module_globals_table[] = {
-    { MP_ROM_QSTR(MP_QSTR_reseed), MP_ROM_PTR(&mod_perlin_reseed_obj) },
-    { MP_ROM_QSTR(MP_QSTR_perlin), MP_ROM_PTR(&mod_perlin_perlin_obj) },
-    { MP_ROM_QSTR(MP_QSTR_octave_perlin), MP_ROM_PTR(&mod_perlin_octave_perlin_obj) },
-    // Other function bindings go here
-};
-
-static MP_DEFINE_CONST_DICT(perlin_module_globals, perlin_module_globals_table);
-
-const mp_obj_module_t perlin_user_cmodule = {
-    .base = { &mp_type_module },
-    .globals = (mp_obj_dict_t*)&perlin_module_globals,
-};
-
-MP_REGISTER_MODULE(MP_QSTR_perlin, perlin_user_cmodule);
-
-/*// Define a Python reference to the function above
-static MP_DEFINE_CONST_FUN_OBJ_VAR(py_noise2_obj, 4, py_noise2);
 
 // This is the entry point and is called when the module is imported
 mp_obj_t mpy_init(mp_obj_fun_bc_t *self, size_t n_args, size_t n_kw, mp_obj_t *args) {
@@ -143,8 +121,10 @@ mp_obj_t mpy_init(mp_obj_fun_bc_t *self, size_t n_args, size_t n_kw, mp_obj_t *a
     MP_DYNRUNTIME_INIT_ENTRY
 
     // Make the function available in the module's namespace
-    mp_store_global(MP_QSTR_noise2, MP_OBJ_FROM_PTR(&py_noise2_obj));
+    mp_store_global(MP_QSTR_reseed, MP_OBJ_FROM_PTR(&mod_perlin_reseed_obj));
+    mp_store_global(MP_QSTR_perlin, MP_OBJ_FROM_PTR(&mod_perlin_perlin_obj));
+    mp_store_global(MP_QSTR_octave_perlin, MP_OBJ_FROM_PTR(&mod_perlin_octave_perlin_obj));
 
     // This must be last, it restores the globals dict
     MP_DYNRUNTIME_INIT_EXIT
-}*/
+}
