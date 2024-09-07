@@ -1,0 +1,2 @@
+Check [here](https://docs.micropython.org/en/latest/reference/mpyfiles.html) for which MPY version you need.  
+And check [here](https://docs.micropython.org/en/latest/develop/natmod.html) what ARCH you have if you don't know.

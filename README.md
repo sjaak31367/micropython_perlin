@@ -24,7 +24,9 @@ I'm using a Lolin S2 Mini, so I'll end up with `/home/sjaak/.../micropython/port
 3. Update MPY_DIR and ARCH to your usecase.  
 4. `make`  
 5. Upload perlin.mpy to your board.  
-
+  
+Known limitations:  
+Native module and firmware version have different results due to having a different random source.  
 ###### Usage:
 ```py
 import perlin
