@@ -38,46 +38,46 @@ class perlin(object):
 ##    gradv = gradh < 4 ? yf : (gradh==12 || gradh==14 ? xf : zf)
 ##    grad = ((gradh & 1) == - ? gradu : -gradu) + ((gradh & 2) == 0 ? gradv : -gradv)
     gradh = p[aa] & 15
-    gradu = gradh < 8 ? xf : yf
-    gradv = gradh < 4 ? yf : (gradh==12 || gradh==14 ? xf : zf)
-    lerpa = ((gradh & 1) == - ? gradu : -gradu) + ((gradh & 2) == 0 ? gradv : -gradv)
+    gradu = xf if gradh < 8 else yf
+    gradv = yf if gradh < 4 else (xf if gradh==12 or gradh==14 else zf)
+    lerpa = (gradu if (gradh & 1) == 0 else -gradu) + (gradv if (gradh & 2) == 0 else -gradv)
     gradh = p[ba] & 15
-    gradu = gradh < 8 ? xf-1 : yf
-    gradv = gradh < 4 ? yf : (gradh==12 || gradh==14 ? xf-1 : zf)
-    lerpb = ((gradh & 1) == - ? gradu : -gradu) + ((gradh & 2) == 0 ? gradv : -gradv)
+    gradu = xf-1 if gradh < 8 else yf
+    gradv = yf if gradh < 4 else (xf-1 if gradh==12 or gradh==14 else zf)
+    lerpb = (gradu if (gradh & 1) == 0 else -gradu) + (gradv if (gradh & 2) == 0 else -gradv)
     x1 = lerpa + u * (lerpb - lerpa)
 
     gradh = p[ab] & 15
-    gradu = gradh < 8 ? xf : yf-1
-    gradv = gradh < 4 ? yf-1 : (gradh==12 || gradh==14 ? xf : zf)
-    lerpa = ((gradh & 1) == - ? gradu : -gradu) + ((gradh & 2) == 0 ? gradv : -gradv)
+    gradu = xf if gradh < 8 else yf-1
+    gradv = yf-1 if gradh < 4 else (xf if gradh==12 or gradh==14 else zf)
+    lerpa = (gradu if (gradh & 1) == 0 else -gradu) + (gradv if (gradh & 2) == 0 else -gradv)
     gradh = p[bb] & 15
-    gradu = gradh < 8 ? xf-1 : yf-1
-    gradv = gradh < 4 ? yf-1 : (gradh==12 || gradh==14 ? xf-1 : zf)
-    lerpb = ((gradh & 1) == - ? gradu : -gradu) + ((gradh & 2) == 0 ? gradv : -gradv)
+    gradu = xf-1 if gradh < 8 else yf-1
+    gradv = yf-1 if gradh < 4 else (xf-1 if gradh==12 or gradh==14 else zf)
+    lerpb = (gradu if (gradh & 1) == 0 else -gradu) + (gradv if (gradh & 2) == 0 else -gradv)
     x2 = lerpa + u * (lerpb - lerpa)
 
     y1 = x1 + v *(x2 - x1)
 
 
     gradh = p[aa+1] & 15
-    gradu = gradh < 8 ? xf : yf
-    gradv = gradh < 4 ? yf : (gradh==12 || gradh==14 ? xf : zf-1)
-    lerpa = ((gradh & 1) == - ? gradu : -gradu) + ((gradh & 2) == 0 ? gradv : -gradv)
+    gradu = xf if gradh < 8 else yf
+    gradv = yf if gradh < 4 else (xf if gradh==12 or gradh==14 else zf-1)
+    lerpa = (gradu if (gradh & 1) == 0 else -gradu) + (gradv if (gradh & 2) == 0 else -gradv)
     gradh = p[ba+1] & 15
-    gradu = gradh < 8 ? xf-1 : yf
-    gradv = gradh < 4 ? yf : (gradh==12 || gradh==14 ? xf-1 : zf-1)
-    lerpb = ((gradh & 1) == - ? gradu : -gradu) + ((gradh & 2) == 0 ? gradv : -gradv)
+    gradu = xf-1 if gradh < 8 else yf
+    gradv = yf if gradh < 4 else (xf-1 if gradh==12 or gradh==14 else zf-1)
+    lerpb = (gradu if (gradh & 1) == 0 else -gradu) + (gradv if (gradh & 2) == 0 else -gradv)
     x1 = lerpa + u * (lerpb - lerpa)
 
     gradh = p[ab+1] & 15
-    gradu = gradh < 8 ? xf : yf-1
-    gradv = gradh < 4 ? yf-1 : (gradh==12 || gradh==14 ? xf : zf-1)
-    lerpa = ((gradh & 1) == - ? gradu : -gradu) + ((gradh & 2) == 0 ? gradv : -gradv)
+    gradu = xf if gradh < 8 else yf-1
+    gradv = yf-1 if gradh < 4 else (xf if gradh==12 or gradh==14 else zf-1)
+    lerpa = (gradu if (gradh & 1) == 0 else -gradu) + (gradv if (gradh & 2) == 0 else -gradv)
     gradh = p[bb+1] & 15
-    gradu = gradh < 8 ? xf-1 : yf-1
-    gradv = gradh < 4 ? yf-1 : (gradh==12 || gradh==14 ? xf-1 : zf-1)
-    lerpb = ((gradh & 1) == - ? gradu : -gradu) + ((gradh & 2) == 0 ? gradv : -gradv)
+    gradu = xf-1 if gradh < 8 else yf-1
+    gradv = yf-1 if gradh < 4 else (xf-1 if gradh==12 or gradh==14 else zf-1)
+    lerpb = (gradu if (gradh & 1) == 0 else -gradu) + (gradv if (gradh & 2) == 0 else -gradv)
     x2 = lerpa + u * (lerpb - lerpa)
 
     y2 = x1 + v *(x2 - x1)
