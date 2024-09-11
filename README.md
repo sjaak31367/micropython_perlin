@@ -26,16 +26,28 @@ I'm using a Lolin S2 Mini, so I'll end up with `/home/sjaak/.../micropython/port
 5. Upload perlin.mpy to your board.  
   
 Known limitations:  
-Native module and firmware version have different results due to having a different random source.  
+Native module and firmware/python version have different results due to having a different random source.  
+###### Speed:  
+To caclucate 6 octaves for 100'000 points (on an ESP32) took:  
+
+| version  | time      |
+| -------- | --------- |
+| python   | 251'091ms |
+| firmware |   9'974ms |
+| natmod   |   4'340ms |
+
+Or in other words, the Python version is here for compatibility, but I'd recommend using another version.  
 ###### Usage:
 ```py
 import perlin
 
-#perlin.reseed(int seed)
-perlin.reseed(31367)
+p = perlin.perlin()
 
-#perlin.octave_perlin(float x, float y, float z, [int octaves, [float persistence]])
-perlin.octave_perlin(0.5, 0.5, 0.5, 6)  # 0.531746
+# reseed(int seed)
+p.reseed(31367)
+
+# octave_perlin(float x, float y, float z, [int octaves, [float persistence]])
+p.octave_perlin(0.5, 0.5, 0.5, 6)  # 0.531746
 ```  
 
 ----
