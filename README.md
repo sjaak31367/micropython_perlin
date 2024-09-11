@@ -28,7 +28,7 @@ I'm using a Lolin S2 Mini, so I'll end up with `/home/sjaak/.../micropython/port
 Known limitations:  
 Native module and firmware/python version have different results due to having a different random source.  
 ###### Speed:  
-To caclucate 6 octaves for 100'000 points (on an ESP32) took:  
+To calculate 6 octaves for 100'000 points (on an ESP32) took:  
 
 | version  | time      |
 | -------- | --------- |
