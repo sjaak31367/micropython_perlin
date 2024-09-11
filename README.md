@@ -32,7 +32,7 @@ To caclucate 6 octaves for 100'000 points (on an ESP32) took:
 
 | version  | time      |
 | -------- | --------- |
-| python   | 251'091ms |
+| python   | 231'003ms |
 | firmware |   9'974ms |
 | natmod   |   4'340ms |
 
@@ -41,13 +41,11 @@ Or in other words, the Python version is here for compatibility, but I'd recomme
 ```py
 import perlin
 
-p = perlin.perlin()
+#perlin.reseed(int seed)
+perlin.reseed(31367)
 
-# reseed(int seed)
-p.reseed(31367)
-
-# octave_perlin(float x, float y, float z, [int octaves, [float persistence]])
-p.octave_perlin(0.5, 0.5, 0.5, 6)  # 0.531746
+#perlin.octave_perlin(float x, float y, float z, [int octaves, [float persistence]])
+perlin.octave_perlin(0.5, 0.5, 0.5, 6)  # 0.531746
 ```  
 
 ----
